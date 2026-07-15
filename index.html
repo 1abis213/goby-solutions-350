@@ -156,7 +156,7 @@
           <span style="font-family:'Playfair Display',serif;font-size:1.15rem;color:#fff;letter-spacing:.02em">GOBY</span>
         </a>
         <button class="sm-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
-          <span class="sm-toggle-textWrap"><span class="sm-toggle-textInner" id="navToggleText"><span>Menu</span><span>Close</span></span></span>
+          <span class="sm-toggle-textWrap" style="display:none"><span class="sm-toggle-textInner" id="navToggleText"><span>Close</span></span></span>
           <span class="sm-icon" id="navToggleIcon">
             <span class="sm-icon-line"></span>
             <span class="sm-icon-line sm-icon-line-v"></span>
@@ -710,7 +710,7 @@
       function resetItems(){gsap.set(panelItems,{yPercent:140,rotate:10,clearProps:'opacity'});gsap.set(numItems,{'--sm-num-opacity':0})}
       function openNavPanel(){
         if(navOpen) return; navOpen=true; navPanel.classList.add('open'); navBackdrop.classList.add('open'); toggleBtn.setAttribute('aria-expanded','true');
-        spinIcon(1);cycleText(1);
+        spinIcon(1);
         if(!hasGSAP){document.addEventListener('keydown',navEsc);return}
         if(closeTween){closeTween.kill();closeTween=null}
         if(openTL){openTL.kill();openTL=null}
@@ -729,7 +729,7 @@
       }
       function closeNavPanel(){
         if(!navOpen) return; navOpen=false; navBackdrop.classList.remove('open'); toggleBtn.setAttribute('aria-expanded','false');
-        spinIcon(0);cycleText(0);
+        spinIcon(0);
         document.removeEventListener('keydown',navEsc);
         if(!hasGSAP){navPanel.classList.remove('open');return}
         if(openTL){openTL.kill();openTL=null}
@@ -739,7 +739,6 @@
       }
       function navEsc(e){if(e.key==='Escape')closeNavPanel()}
       function spinIcon(o){gsap.to(toggleIcon,{rotate:o?225:0,duration:o?.8:.35,ease:o?'power4.out':'power3.inOut',overwrite:'auto'})}
-      function cycleText(o){gsap.set(toggleText,{yPercent:0});gsap.to(toggleText,{yPercent:o?-50:0,duration:.45,ease:'power4.out'})}
       toggleBtn.addEventListener('click',function(){navOpen?closeNavPanel():openNavPanel()});
       document.addEventListener('mousedown',function(e){if(navOpen&&!navPanel.contains(e.target)&&!toggleBtn.contains(e.target))closeNavPanel()});
       document.querySelector('form').addEventListener('submit', function(e){
