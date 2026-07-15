@@ -113,8 +113,7 @@
       #legalContent h4{font-size:.9rem;color:var(--gold);font-weight:500;margin:1.25rem 0 .5rem}
       #legalContent p{color:var(--text2);font-size:.85rem;line-height:1.7;margin-bottom:.75rem}
 
-      @media(max-width:768px){
-        .modal{grid-template-columns:1fr}
+      
         .modal .modal-img-wrap{min-height:200px;border-radius:20px 20px 0 0}
         .modal .modal-body{padding:1.5rem}
         .modal .modal-actions .btn{min-width:100%}
@@ -203,9 +202,7 @@
         </div>
       </section>
 
-      
-
-      <section id="about" class="section" style="background:var(--bg2);position:relative;overflow:hidden">
+            <section id="about" class="section" style="background:var(--bg2);position:relative;overflow:hidden">
         <div style="position:absolute;top:0;right:0;width:40%;height:100%;background:linear-gradient(135deg,rgba(201,149,42,.03),transparent);pointer-events:none"></div>
         <div class="container">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center">
@@ -573,29 +570,12 @@
       }, { threshold: .5 });
       counters.forEach(el => counterObserver.observe(el));
 
-          items.forEach(p => {
-              '<div class="img-wrap"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy" /></div>' +
-              '<div class="info"><span class="cat-tag" data-i18n="' + meta.key + '">' + meta.key + '</span>' +
-              '<h4>' + p.name + '</h4>' +
-              '<div class="price">$' + p.price + ' <small>CAD</small></div>' +
-          });
-          html += '</div>';
-        });
-        grid.innerHTML = html;
-        setTimeout(() => {
-          grid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        }, 100);
-      }
-
-        document.getElementById('modalTitle').textContent = p.name;
-        document.getElementById('modalDesc').textContent = l === 'en' ? p.descEN : p.descFR;
-        document.getElementById('modalPrice').textContent = '$' + p.price + ' CAD';
-        document.getElementById('modalEmail').href = 'mailto:business.ab.bis@gmail.com?subject=' + encodeURIComponent('Question about ' + p.name);
-        document.getElementById('modalCall').href = 'tel:+15147991291';
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-
+      
+      
+      
+      
+      
+      
       function toggleFAQ(btn){
         const answer = btn.nextElementSibling;
         const isOpen = answer.classList.contains('open');
@@ -684,8 +664,6 @@
       });
 
       setTimeout(showWABubble, 4000);
-      
-
       document.querySelector('form').addEventListener('submit', function(e){
         const raw = document.getElementById('contactInput').value.replace(/[\s\-\+\(\)\.]/g, '');
         if(raw.length < 10 || raw.length > 15 || !/^\d+$/.test(raw)){
