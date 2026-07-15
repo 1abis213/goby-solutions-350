@@ -707,18 +707,20 @@
       document.getElementById('brandTrack').addEventListener('mouseenter',function(){this.classList.add('slow')});
       document.getElementById('brandTrack').addEventListener('mouseleave',function(){this.classList.remove('slow')});
       var navPanel=document.getElementById('navPanel'),navBackdrop=document.getElementById('navBackdrop'),prelayers=document.querySelectorAll('.sm-prelayer'),panelItems=document.querySelectorAll('.sm-panel-itemLabel'),numItems=document.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item'),toggleBtn=document.getElementById('navToggle'),toggleIcon=document.getElementById('navToggleIcon'),toggleText=document.getElementById('navToggleText'),navOpen=false,hasGSAP=typeof gsap!=='undefined',openTL=null,closeTween=null;
+      function resetItems(){gsap.set(panelItems,{yPercent:140,rotate:10,clearProps:'opacity'});gsap.set(numItems,{'--sm-num-opacity':0})}
       function openNavPanel(){
         if(navOpen) return; navOpen=true; navPanel.classList.add('open'); navBackdrop.classList.add('open'); toggleBtn.setAttribute('aria-expanded','true');
+        spinIcon(1);cycleText(1);
         if(!hasGSAP){document.addEventListener('keydown',navEsc);return}
-        openTL&&openTL.kill(); closeTween&&(closeTween.kill(),closeTween=null);
-        var offscreen=100;
-        gsap.set([].slice.call(prelayers),{xPercent:offscreen,opacity:1});
-        gsap.set(navPanel,{xPercent:offscreen,opacity:1});
-        gsap.set(panelItems,{yPercent:140,rotate:10});
-        gsap.set(numItems,{'--sm-num-opacity':0});
+        if(closeTween){closeTween.kill();closeTween=null}
+        if(openTL){openTL.kill();openTL=null}
+        var offscreen=100,layers=[].slice.call(prelayers);
+        gsap.set(layers,{xPercent:offscreen,clearProps:'opacity'});
+        gsap.set(navPanel,{xPercent:offscreen,clearProps:'opacity'});
+        resetItems();
         var tl=gsap.timeline({onComplete:function(){document.addEventListener('keydown',navEsc)}});
-        [].slice.call(prelayers).forEach(function(el,i){tl.fromTo(el,{xPercent:offscreen},{xPercent:0,duration:.5,ease:'power4.out'},i*.07)});
-        var lastTime=(prelayers.length-1)*.07,panelTime=lastTime+(prelayers.length?0.08:0);
+        layers.forEach(function(el,i){tl.fromTo(el,{xPercent:offscreen},{xPercent:0,duration:.5,ease:'power4.out'},i*.07)});
+        var lastTime=(layers.length-1)*.07,panelTime=lastTime+(layers.length?0.08:0);
         tl.fromTo(navPanel,{xPercent:offscreen},{xPercent:0,duration:.65,ease:'power4.out'},panelTime);
         var itemStart=panelTime+.65*.15;
         tl.to(panelItems,{yPercent:0,rotate:0,duration:1,ease:'power4.out',stagger:{each:.1,from:'start'}},itemStart);
@@ -727,16 +729,18 @@
       }
       function closeNavPanel(){
         if(!navOpen) return; navOpen=false; navBackdrop.classList.remove('open'); toggleBtn.setAttribute('aria-expanded','false');
+        spinIcon(0);cycleText(0);
         document.removeEventListener('keydown',navEsc);
         if(!hasGSAP){navPanel.classList.remove('open');return}
-        openTL&&(openTL.kill(),openTL=null); closeTween&&closeTween.kill();
+        if(openTL){openTL.kill();openTL=null}
+        if(closeTween){closeTween.kill();closeTween=null}
         var all=[].slice.call(prelayers);all.push(navPanel);
-        closeTween=gsap.to(all,{xPercent:100,duration:.32,ease:'power3.in',overwrite:'auto',onComplete:function(){navPanel.classList.remove('open');gsap.set(panelItems,{yPercent:140,rotate:10});gsap.set(numItems,{'--sm-num-opacity':0})}});
+        closeTween=gsap.to(all,{xPercent:100,duration:.32,ease:'power3.in',overwrite:'auto',onComplete:function(){navPanel.classList.remove('open');resetItems()}});
       }
       function navEsc(e){if(e.key==='Escape')closeNavPanel()}
-      function spinIcon(open){gsap.to(toggleIcon,{rotate:open?225:0,duration:open?.8:.35,ease:open?'power4.out':'power3.inOut',overwrite:'auto'})}
-      function cycleText(open){gsap.set(toggleText,{yPercent:0});gsap.to(toggleText,{yPercent:open?-50:0,duration:.45,ease:'power4.out'})}
-      toggleBtn.addEventListener('click',function(){navOpen?closeNavPanel():openNavPanel();spinIcon(!navOpen);cycleText(!navOpen)});
+      function spinIcon(o){gsap.to(toggleIcon,{rotate:o?225:0,duration:o?.8:.35,ease:o?'power4.out':'power3.inOut',overwrite:'auto'})}
+      function cycleText(o){gsap.set(toggleText,{yPercent:0});gsap.to(toggleText,{yPercent:o?-50:0,duration:.45,ease:'power4.out'})}
+      toggleBtn.addEventListener('click',function(){navOpen?closeNavPanel():openNavPanel()});
       document.addEventListener('mousedown',function(e){if(navOpen&&!navPanel.contains(e.target)&&!toggleBtn.contains(e.target))closeNavPanel()});
       document.querySelector('form').addEventListener('submit', function(e){
         const raw = document.getElementById('contactInput').value.replace(/[\s\-\+\(\)\.]/g, '');
