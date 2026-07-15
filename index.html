@@ -723,8 +723,8 @@
         var lastTime=(layers.length-1)*.07,panelTime=lastTime+(layers.length?0.08:0);
         tl.fromTo(navPanel,{xPercent:offscreen},{xPercent:0,duration:.65,ease:'power4.out'},panelTime);
         var itemStart=panelTime+.65*.15;
-        tl.to(panelItems,{yPercent:0,rotate:0,duration:1,ease:'power4.out',stagger:{each:.1,from:'start'}},itemStart);
-        tl.to(numItems,{duration:.6,ease:'power2.out','--sm-num-opacity':1,stagger:{each:.08,from:'start'}},itemStart+.1);
+        tl.to(panelItems,{yPercent:0,rotate:0,duration:1.1,ease:'power3.out',stagger:{each:.12,from:'start'}},itemStart);
+        tl.to(numItems,{duration:.7,ease:'power2.out','--sm-num-opacity':1,stagger:{each:.1,from:'start'}},itemStart+.1);
         openTL=tl;
       }
       function closeNavPanel(){
@@ -735,7 +735,7 @@
         if(openTL){openTL.kill();openTL=null}
         if(closeTween){closeTween.kill();closeTween=null}
         var all=[].slice.call(prelayers);all.push(navPanel);
-        closeTween=gsap.to(all,{xPercent:100,duration:.32,ease:'power3.in',overwrite:'auto',onComplete:function(){navPanel.classList.remove('open');resetItems()}});
+        closeTween=gsap.to(all,{xPercent:100,duration:.4,ease:'power2.in',overwrite:'auto',onComplete:function(){navPanel.classList.remove('open');resetItems()}});
       }
       function navEsc(e){if(e.key==='Escape')closeNavPanel()}
       function spinIcon(o){gsap.to(toggleIcon,{rotate:o?225:0,duration:o?.8:.35,ease:o?'power4.out':'power3.inOut',overwrite:'auto'})}
